@@ -1,0 +1,68 @@
+header {
+    background-color: #FFFEF8;
+    margin: 0px;
+}
+
+#login a{
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #FFFEF8;
+    margin: 0px;
+    padding-top: 50px;
+    padding-bottom: 100px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    height: auto;
+    padding: 10px;
+    margin: 20px;
+}
+
+.in-search{
+    width: 379px;
+    height: 45px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border: none;
+    box-shadow: 0 4px 8px 0 lightgray;
+}
+
+#btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#connect {
+    background-color: #1D6154;
+    color: white;
+    padding: 7px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: 20px;
+}
+
+#mdp {
+    font-size: smaller;
+    color: black;
+    border: 0px;
+    border-radius: 0px;
+    border-bottom: lightgray solid 1px;
+    padding: 0px;
+}
+
+footer {
+    display: flex;
+    justify-content: right;
+    margin-top: 30px;
+}

@@ -186,3 +186,32 @@ footer nav ul {
 	margin: 2em
 }
 
+#ulFiltre {	
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.liFiltre {
+	margin: 10px;
+	margin-bottom: 25px;
+	margin-top: 5px;
+}
+
+button {
+	border: none;
+	background-color: white;
+	color: #1D6154;
+	border: #1D6154 1px solid;
+	border-radius: 30%/100%;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	font-size: 15px;
+}
+
+button:focus {
+	background-color: #1D6154;
+	color: white;
+}
