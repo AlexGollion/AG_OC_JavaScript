@@ -81,3 +81,6 @@ fetch('http://localhost:5678/api/works')
 
                 })  
         })
+
+const token = window.localStorage.getItem('token');
+console.log(token);
