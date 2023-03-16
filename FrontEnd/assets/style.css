@@ -55,8 +55,8 @@ body {
 }
 header {
 	display: flex;
-	justify-content: space-between;
-	margin: 50px 0
+	flex-direction: column-reverse;
+	margin: 50px 0;
 }
 section {
 	margin: 50px 0
@@ -103,8 +103,22 @@ li:hover {
 	align-items: center;
 }
 #introduction figure {
-	flex: 1
+	flex: 1;
 }
+
+#introduction figure figcaption {
+	display: block;
+	margin: auto;
+	width: 80%;
+	margin-top: 5px;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+	margin-left: 5px;
+}
+
 #introduction img {
 	display: block;
 	margin: auto;
@@ -198,7 +212,7 @@ footer nav ul {
 	margin-top: 5px;
 }
 
-button {
+#tous, #hotels, #appartements, #objets {
 	border: none;
 	background-color: white;
 	color: #1D6154;
@@ -211,7 +225,60 @@ button {
 	font-size: 15px;
 }
 
-button:focus {
+#tous:focus, #hotels:focus, #appartements:focus, #objets:focus {
 	background-color: #1D6154;
 	color: white;
+}
+
+#header {
+	display: flex;
+	justify-content: space-between;
+}
+
+.admin {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	background-color: black;
+	color: white;
+	height: 50px;
+}
+
+.admin i, .admin p, .admin button {
+	margin: 5px;
+}
+
+.admin button {
+	border: none;
+	background-color: white;
+	color: black;
+	border: white 1px solid;
+	border-radius: 20%/100%;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	font-size: 12px;
+}
+
+.admin p {
+	color: lightgray;
+}
+
+.projet {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+}
+
+.projet h2, .projet i, .projet a {
+	margin: 5px;
+}
+
+.projet i, .projet a {
+	position: relative;
+	bottom: 12px;
 }

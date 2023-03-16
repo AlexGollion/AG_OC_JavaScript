@@ -9,22 +9,34 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<link rel="stylesheet" href="./assets/modal.css">
 	<link rel="shortcut icon" href="#">
+	<script src="https://kit.fontawesome.com/177a696033.js" crossorigin="anonymous"></script>
 	<script src="script.js"></script> 
+	
 </head>
 <body>
 <header>
-	<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
-	<nav>
-		<ul>
-			<li>projets</li>
-			<li>contact</li>
-			<li><a href="login.html">login</a></li>
-			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
-		</ul>
-	</nav>
+	<div id="header">
+		<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
+		<nav>
+			<ul>
+				<li>projets</li>
+				<li>contact</li>
+				<li><a href="login.html">login</a></li>
+				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+			</ul>
+		</nav>
+	</div>
 </header>
 <main>
+	<aside id="modal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titleModal" style="display: none;">
+		<div class="modal-wrapper js-modal-stop">
+			<i class="fa-solid fa-xmark js-close-modal"></i>
+			<h1 id="titleModal">Galerie photo</h1>
+		</div>
+	</aside>
+
 	<section id="introduction">
 		<figure>
 			<img src="./assets/images/sophie-bluel.png" alt="">

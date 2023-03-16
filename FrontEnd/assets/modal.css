@@ -1,0 +1,96 @@
+.modal {
+    box-sizing: border-box;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.modal-wrapper {
+    position: relative;
+    overflow: auto;
+    width: 450px;
+    padding: 20px;
+    max-width: calc(100vw - 20px);
+    max-height: calc(100vh - 20px);
+    background-color: white;
+    border-radius: 2%;
+}
+
+.modal-wrapper h1 {
+    color: black;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-family: 'Work Sans';
+    font-weight: lighter;
+}
+
+.fa-xmark, .fa-trash-can {
+    position: absolute;
+    right: 2%;
+    top: 2%;
+}
+
+.modal-img {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    margin: 50px;
+}
+
+.modal-img img {
+    width: 100%;
+}
+
+.modal-img figure {
+    position: relative;
+}
+
+.fa-trash-can {
+    background-color: black;
+    color: white;
+    padding: 2px;
+}
+
+.modal-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-top: lightgray 2px solid;
+    margin: 50px;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    padding: 20px;
+}
+
+#btn-ajout {
+    width: 50%;
+    background-color: #1D6154;
+    color: white;
+    border: #1D6154 1px solid;
+    border-radius: 20%/100%;
+    padding: 7px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-weight: 600;
+}
+
+#btn-suppr {
+    border: none;
+    background-color: white;
+    color: red;
+    margin-top: 20px;
+    padding: 7px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
