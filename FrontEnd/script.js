@@ -23,7 +23,6 @@ function modifPage()
 {
     const logout = document.querySelectorAll("a");
     logout[0].innerText = "logout";
-    console.log(logout[0]);
 
     const divEdit = document.createElement("div");
     divEdit.className = "admin";
@@ -37,7 +36,6 @@ function modifPage()
     divEdit.appendChild(pEdit);
     divEdit.appendChild(btnEdit);
     const header = document.querySelector("header");
-    console.log(header);
     header.appendChild(divEdit);
 
     const portfolio = document.querySelector("#portfolio");
@@ -117,12 +115,146 @@ function eventModal()
         })
 }
 
-function createModal(set)
+const afficherImage = function(e)
 {
+    console.log("ici");
+    e.preventDefault();
+    const div = document.querySelector('.div-file');
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(e.target.files[0]);
+    img.id = "preview";
+    div.innerHTML = "";
+    div.appendChild(img);
+}
+
+const validWorks = async function (e)
+{
+    e.preventDefault();
+    console.log(e.target.files);
+    const data = {
+        image: e.target.files[0],
+        title: document.querySelector("#inTitle").value,
+        category: document.querySelector("#categorie").value,
+    };
+
+    const token = window.localStorage.getItem('token');
+
+    const res = await fetch('http://localhost:5678/api/works',
+    {
+        method: 'POST',
+        headers:
+        {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${token}`,
+            'accept': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    //const test = await res.json();
+    console.log(res);
+}
+
+const addWorks = function ()
+{
+    const title = document.querySelector("#titleModal");
+    title.innerText = "Ajout photo";
     const divAside = document.querySelector('.modal-wrapper');
+    const divImg = document.querySelector('.modal-img');
+    const btnSuppr = document.querySelector('#btn-suppr');
+    divAside.removeChild(divImg);
+    const divBtn = document.querySelector('.modal-button');
+    divBtn.removeChild(btnSuppr);
+
+    const iReturn = document.createElement('i');
+    iReturn.className = "fa-solid fa-arrow-left fa-1x";
+    iReturn.addEventListener('click', function()
+    {
+        const divAside = document.querySelector('aside');
+        divAside.innerHTML = "";
+        createModal();
+    })
+
+    const btnValid = document.querySelector('#btn-ajout');
+    btnValid.innerText = "Valider";
+    btnValid.type = "submit"; 
+    btnValid.removeEventListener('click', addWorks);
+    btnValid.addEventListener('click', validWorks);
+
+    const form = document.createElement('form');
+
+    const divAjout = document.createElement('div');
+    divAjout.className = "div-file";
+    const iconImg = document.createElement('i');
+    iconImg.className = "fa-solid fa-image fa-5x";
+    const labelAjout = document.createElement('label');
+    labelAjout.innerText = "+ Ajouter photo";
+    const inAjout = document.createElement('input');
+    inAjout.id = "ajout";
+    inAjout.name = "ajout";
+    inAjout.type = "file";
+    inAjout.accept = "image/png, image/jpg";
+    inAjout.maxLength = "4000";
+    inAjout.addEventListener('change', afficherImage);
+    const pAjout = document.createElement('p');
+    pAjout.innerText = "jpg, png: 4mo max";
+    labelAjout.appendChild(inAjout);
+    divAjout.appendChild(iconImg);
+    divAjout.appendChild(labelAjout);
+    divAjout.appendChild(pAjout);
+
+    const labelTitle = document.createElement('label');
+    labelTitle.innerText = "Titre";
+    const inTitle = document.createElement('input');
+    inTitle.type = "text";
+    inTitle.id = "inTitle";
+    inTitle.name = 'title';
+    const labelCat = document.createElement('label');
+    labelCat.innerText = "Catégorie";
+    const selectCat = document.createElement('select');
+    selectCat.name = "categorie";
+    selectCat.id = "categorie";
+    const categorie = JSON.parse(window.localStorage.getItem('catégorie'));
+    const option = document.createElement('option');
+    option.value = "";
+    option.innerText = "";
+    selectCat.appendChild(option);
+    for(let i = 0; i<categorie.length; i++)
+    {
+        const option = document.createElement('option');
+        option.value = categorie[i].id;
+        option.innerText = categorie[i].name;
+        selectCat.appendChild(option);
+    }
+    
+    form.appendChild(divAjout);
+    form.appendChild(labelTitle);
+    form.appendChild(inTitle);
+    form.appendChild(labelCat);
+    form.appendChild(selectCat);
+
+    divAside.removeChild(divBtn);
+    divAside.appendChild(iReturn);
+    divAside.appendChild(form);
+    divAside.appendChild(divBtn);
+}
+
+function createModal()
+{
+    const divAside = document.createElement('div');
+    divAside.className = 'modal-wrapper js-modal-stop';
+    const iClose = document.createElement('i');
+    iClose.className = "fa-solid fa-xmark js-close-modal";
+    const title = document.createElement('h1');
+    title.innerText = "Galerie photo";
+    title.id = "titleModal";
+    divAside.appendChild(iClose);
+    divAside.appendChild(title);
+
     const divImg = document.createElement('div');
     divImg.className = "modal-img";
 
+    const setArr = JSON.parse(window.localStorage.getItem('setTous'));
+    const set = new Set(setArr);
     let setIter = set.values();
     for (let i = 0; i<set.size; i++)
     {
@@ -133,6 +265,31 @@ function createModal(set)
         imageElement.src = works.imageUrl;
         const iElement = document.createElement("i");
         iElement.className = "fa-solid fa-trash-can";
+        iElement.addEventListener('click', function() 
+        {
+            const token = window.localStorage.getItem('token');
+            console.log(token);
+            console.log(works.id);
+            fetch(`http://localhost:5678/api/works/${works.id}`, {
+                method: 'DELETE',
+                header: 
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            })
+            .then(res => 
+            {
+                res.json().then(data => 
+                {
+                    console.log(data);
+                })
+            }) 
+            /*document.querySelector('.modal-img').innerHTML = "";
+            document.querySelector(".gallery").innerHTML = "";
+            genererSet(set);*/ 
+            //console.log(dataRes);
+        })
         const figcaptionElement = document.createElement("figcaption");
         figcaptionElement.innerText = "éditer";
     
@@ -141,6 +298,9 @@ function createModal(set)
         figureElement.appendChild(figcaptionElement);
     
         divImg.appendChild(figureElement);
+
+        const blockAside = document.querySelector('aside');
+        blockAside.appendChild(divAside);
     }
 
     const divBtn = document.createElement('div');
@@ -148,6 +308,7 @@ function createModal(set)
     const btnAjout = document.createElement('button');
     btnAjout.innerText = "Ajouter une photo";
     btnAjout.id = "btn-ajout";
+    btnAjout.addEventListener('click', addWorks);
     const btnSuppr = document.createElement('button');
     btnSuppr.innerText = "Supprimer la galerie";
     btnSuppr.id = "btn-suppr";
@@ -173,6 +334,7 @@ fetch('http://localhost:5678/api/works')
                             {
                                 resCat.json().then(dataCat =>
                                 {   
+                                    window.localStorage.setItem("catégorie", JSON.stringify(dataCat));
                                     for (let i = 0; i<dataWorks.length; i++)
                                     {
                                         if (dataWorks[i].categoryId == dataCat[0].id) setObjets.add(dataWorks[i]);
@@ -183,8 +345,11 @@ fetch('http://localhost:5678/api/works')
 
                                         setTous.add(dataWorks[i]);
                                     }
+
+                                    const setArr = Array.from(setTous);
+                                    window.localStorage.setItem('setTous', JSON.stringify(setArr));
                                                         
-                                   const bouttonTous = document.querySelector("#tous");
+                                    const bouttonTous = document.querySelector("#tous");
                                     bouttonTous.addEventListener("click", function ()
                                     {
                                         document.querySelector(".gallery").innerHTML = "";
@@ -215,11 +380,12 @@ fetch('http://localhost:5678/api/works')
                                     bouttonTous.click();
                                     bouttonTous.focus();
                                     const token = window.localStorage.getItem('token');
+
                                     if (token != null)
                                     {
                                         modifPage();
                                         eventModal();
-                                        createModal(setTous);
+                                        createModal();
                                     } 
                                     
                                 })

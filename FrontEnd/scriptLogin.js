@@ -23,6 +23,7 @@ formulaire.addEventListener("submit", async function(event)
 
     if (dataRes.token != null) 
     {
+        console.log(dataRes.token);
         window.localStorage.setItem("token", dataRes.token);
         document.location.href="index.html";
     }
