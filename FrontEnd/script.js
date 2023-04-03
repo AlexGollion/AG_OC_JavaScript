@@ -1,3 +1,4 @@
+// Fonction pour afficher dynamiquement les projets 
 function genererSet(set)
 {
     let setIter = set.values();
@@ -19,10 +20,20 @@ function genererSet(set)
     }
 }
 
+// Fonction pour se déconnecter
+const disconnect = function(e)
+{
+    e.preventDefault();
+    window.localStorage.clear();
+    location.reload();
+}
+
+// Permet d'afficher la page en mode édition
 function modifPage()
 {
     const logout = document.querySelectorAll("a");
     logout[0].innerText = "logout";
+    logout[0].addEventListener('click', disconnect);
 
     const divEdit = document.createElement("div");
     divEdit.className = "admin";
@@ -71,6 +82,7 @@ function modifPage()
 
 let modalVar = null;
 
+// Permet d'ouvrir la modal
 const openModal = function (e)
 {
     e.preventDefault();
@@ -86,6 +98,8 @@ const openModal = function (e)
     section.removeAttribute("class");
     section.className = "js-temp";
 }
+
+// Permet de ferlmer la modal
 const closeModal = function (e)
 {
     if (modalVar === null) return;
@@ -107,6 +121,7 @@ const stopPropagation = function (e)
     e.stopPropagation();
 }
 
+
 function eventModal()
 {
     document.querySelectorAll('.js-modal').forEach(a => 
@@ -115,27 +130,36 @@ function eventModal()
         })
 }
 
+// Affiche l'image du projet à ajouter 
 const afficherImage = function(e)
 {
-    console.log("ici");
     e.preventDefault();
     const div = document.querySelector('.div-file');
     const img = document.createElement('img');
+    console.log(e.target.files[0]);
     img.src = URL.createObjectURL(e.target.files[0]);
+    worksImage = e.target.files[0];
     img.id = "preview";
     div.innerHTML = "";
     div.appendChild(img);
 }
 
+var worksImage;
+
+// Permet d'ajouter un projet
 const validWorks = async function (e)
 {
     e.preventDefault();
-    console.log(e.target.files);
-    const data = {
-        image: e.target.files[0],
-        title: document.querySelector("#inTitle").value,
-        category: document.querySelector("#categorie").value,
-    };
+    // const data = {
+    //     'image': worksImage,
+    //     'title': document.querySelector("#inTitle").value,
+    //     'category': document.querySelector("#categorie").value,
+    // };
+
+    const form = new FormData();
+    form.append('image', worksImage);
+    form.append('title', document.querySelector("#inTitle").value);
+    form.append('category', document.querySelector("#categorie").value);
 
     const token = window.localStorage.getItem('token');
 
@@ -144,16 +168,17 @@ const validWorks = async function (e)
         method: 'POST',
         headers:
         {
-            'Content-Type': 'multipart/form-data',
+            // 'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${token}`,
             'accept': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: form,
     })
     //const test = await res.json();
     console.log(res);
 }
 
+// Afficher le formulaire d'ajout des projets
 const addWorks = function ()
 {
     const title = document.querySelector("#titleModal");
@@ -238,6 +263,48 @@ const addWorks = function ()
     divAside.appendChild(divBtn);
 }
 
+// Permet de supprimer un projet
+const deleteTest = async function(e)
+{
+    e.preventDefault();
+    const token = window.localStorage.getItem('token');
+    const id = this.getAttribute('id');
+    await fetch(`http://localhost:5678/api/works/${id}`, 
+    {
+        method: 'DELETE',
+        header: 
+        {
+            //'Content-Type': 'application/json',
+            'accept': '*/*',
+            'Authorization': `Bearer ${token}`,
+        },
+    })
+    .then(res =>
+        {
+            res.json().then(data =>
+                {
+                    console.log(data);
+                })
+        })
+
+
+    await fetch('http://localhost:5678/api/works')
+    .then(res =>
+        {
+            res.json().then(data => 
+                {
+                    console.log(data);
+                })
+        })
+    
+    /*document.querySelector('.modal-img').innerHTML = "";
+    document.querySelector(".gallery").innerHTML = "";
+    genererSet(set);
+    createModal();*/
+    //console.log(dataRes);
+}
+
+// Créer le modal
 function createModal()
 {
     const divAside = document.createElement('div');
@@ -265,31 +332,9 @@ function createModal()
         imageElement.src = works.imageUrl;
         const iElement = document.createElement("i");
         iElement.className = "fa-solid fa-trash-can";
-        iElement.addEventListener('click', function() 
-        {
-            const token = window.localStorage.getItem('token');
-            console.log(token);
-            console.log(works.id);
-            fetch(`http://localhost:5678/api/works/${works.id}`, {
-                method: 'DELETE',
-                header: 
-                {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-            })
-            .then(res => 
-            {
-                res.json().then(data => 
-                {
-                    console.log(data);
-                })
-            }) 
-            /*document.querySelector('.modal-img').innerHTML = "";
-            document.querySelector(".gallery").innerHTML = "";
-            genererSet(set);*/ 
-            //console.log(dataRes);
-        })
+        iElement.addEventListener('click', deleteTest);
+        iElement.id = works.id;
+
         const figcaptionElement = document.createElement("figcaption");
         figcaptionElement.innerText = "éditer";
     
