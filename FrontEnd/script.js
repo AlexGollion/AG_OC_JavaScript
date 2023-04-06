@@ -269,23 +269,21 @@ const deleteTest = async function(e)
     e.preventDefault();
     const token = window.localStorage.getItem('token');
     const id = this.getAttribute('id');
-    await fetch(`http://localhost:5678/api/works/${id}`, 
-    {
+    fetch(`http://localhost:5678/api/works/${id}`, {
         method: 'DELETE',
-        header: 
+        headers: 
         {
-            //'Content-Type': 'application/json',
-            'accept': '*/*',
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
+            'accept': '*/*'
         },
     })
-    .then(res =>
-        {
-            res.json().then(data =>
-                {
-                    console.log(data);
-                })
-        })
+    .then(response => {
+        console.log('Delete successful');
+    })
+    .catch(error => {
+        console.error('There was an error!', error);
+    });
 
 
     await fetch('http://localhost:5678/api/works')
