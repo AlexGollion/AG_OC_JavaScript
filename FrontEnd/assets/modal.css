@@ -1,3 +1,4 @@
+/* css pour la modal*/
 .modal {
     box-sizing: border-box;
     position: fixed;
@@ -38,6 +39,7 @@
     top: 2%;
 }
 
+/* css pour le block contenant les images des projets dans la modal*/
 .modal-img {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -56,12 +58,14 @@
     position: relative;
 }
 
+/* css por l'icon de suppression des projets*/
 .fa-trash-can {
     background-color: black;
     color: white;
     padding: 2px;
 }
 
+/* css pour le block contenant les bouttons*/
 .modal-button {
     display: flex;
     flex-direction: column;
@@ -73,6 +77,7 @@
     padding: 20px;
 }
 
+/* css pour le boutton d'ajout*/
 #btn-ajout {
     width: 50%;
     background-color: #1D6154;
@@ -85,6 +90,7 @@
     font-weight: 600;
 }
 
+/* css pour le boutton de suppression*/
 #btn-suppr {
     border: none;
     background-color: white;
@@ -95,6 +101,7 @@
     padding-right: 15px;
 }
 
+/* css pour le formulaire d'ajout des projets*/
 form {
     display: flex;
     flex-direction: column;

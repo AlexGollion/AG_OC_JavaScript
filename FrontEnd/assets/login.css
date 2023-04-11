@@ -70,6 +70,7 @@ footer {
     margin-top: 30px;
 }
 
+/* css pour le message d'erreur*/
 .error {
     display: flex;
     justify-content: center;

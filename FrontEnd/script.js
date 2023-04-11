@@ -24,6 +24,7 @@ function genererSet(set)
 const disconnect = function(e)
 {
     e.preventDefault();
+    //On vide le local storage puis on recharge la page 
     window.localStorage.clear();
     location.reload();
 }
@@ -31,10 +32,12 @@ const disconnect = function(e)
 // Permet d'afficher la page en mode édition
 function modifPage()
 {
+    // On change le login en logout pour pouvoir se déconnecter
     const logout = document.querySelectorAll("a");
     logout[0].innerText = "logout";
     logout[0].addEventListener('click', disconnect);
 
+    // On modifie le header
     const divEdit = document.createElement("div");
     divEdit.className = "admin";
     const pEdit = document.createElement("p");
@@ -49,10 +52,12 @@ function modifPage()
     const header = document.querySelector("header");
     header.appendChild(divEdit);
 
+    // On enlève les filtres pour les projets
     const portfolio = document.querySelector("#portfolio");
     const filtre = document.querySelector("#ulFiltre");
     portfolio.removeChild(filtre);
 
+    // On créer le premier lien pour ouvrir la modal
     const section = document.createElement("section");
     section.className = "projet";
     const titre = document.querySelectorAll("h2");
@@ -67,6 +72,7 @@ function modifPage()
     section.appendChild(aProjet);
     portfolio.prepend(section);
 
+    // On créer le second lien pour ouvrir la modal
     const img = document.querySelector("figure");
     const iconModif = document.createElement("i");
     iconModif.className = "fa-regular fa-pen-to-square";
@@ -80,6 +86,7 @@ function modifPage()
     img.appendChild(figcaption);
 }
 
+// Variable qui sert pour la création de la modal
 let modalVar = null;
 
 // Permet d'ouvrir la modal
@@ -99,9 +106,10 @@ const openModal = function (e)
     section.className = "js-temp";
 }
 
-// Permet de ferlmer la modal
+// Permet de fermer la modal
 const closeModal = function (e)
 {
+    console.log(modalVar);
     if (modalVar === null) return;
     e.preventDefault();
     modalVar.style.display = "none";
@@ -121,7 +129,7 @@ const stopPropagation = function (e)
     e.stopPropagation();
 }
 
-
+// On ajoute aux liens la fonction permettant d'ouvrir la modal
 function eventModal()
 {
     document.querySelectorAll('.js-modal').forEach(a => 
@@ -144,23 +152,20 @@ const afficherImage = function(e)
     div.appendChild(img);
 }
 
+// Variable qui sert à l'ajout d'un projet
 var worksImage;
 
 // Permet d'ajouter un projet
 const validWorks = async function (e)
 {
     e.preventDefault();
-    // const data = {
-    //     'image': worksImage,
-    //     'title': document.querySelector("#inTitle").value,
-    //     'category': document.querySelector("#categorie").value,
-    // };
-
+    // On prépare les données à envoyer 
     const form = new FormData();
     form.append('image', worksImage);
     form.append('title', document.querySelector("#inTitle").value);
     form.append('category', document.querySelector("#categorie").value);
 
+    // On récupère le token
     const token = window.localStorage.getItem('token');
 
     const res = await fetch('http://localhost:5678/api/works',
@@ -168,19 +173,17 @@ const validWorks = async function (e)
         method: 'POST',
         headers:
         {
-            // 'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${token}`,
             'accept': 'application/json',
         },
         body: form,
     })
-    //const test = await res.json();
-    console.log(res);
 }
 
 // Afficher le formulaire d'ajout des projets
-const addWorks = function ()
+const addWorks = function (e)
 {
+    e.preventDefault();
     const title = document.querySelector("#titleModal");
     title.innerText = "Ajout photo";
     const divAside = document.querySelector('.modal-wrapper');
@@ -190,23 +193,27 @@ const addWorks = function ()
     const divBtn = document.querySelector('.modal-button');
     divBtn.removeChild(btnSuppr);
 
-    const iReturn = document.createElement('i');
-    iReturn.className = "fa-solid fa-arrow-left fa-1x";
-    iReturn.addEventListener('click', function()
-    {
-        const divAside = document.querySelector('aside');
-        divAside.innerHTML = "";
-        createModal();
-    })
-
+    // Ajout du boutton pour valider l'ajout
     const btnValid = document.querySelector('#btn-ajout');
     btnValid.innerText = "Valider";
     btnValid.type = "submit"; 
     btnValid.removeEventListener('click', addWorks);
     btnValid.addEventListener('click', validWorks);
 
+    // On ajoute la flêche pour revenir en arrière
+    const iReturn = document.createElement('i');
+    iReturn.className = "fa-solid fa-arrow-left fa-1x";
+    iReturn.addEventListener('click', function()
+    {
+        const divAside = document.querySelector('aside');
+        btnValid.removeEventListener('click', validWorks);
+        divAside.innerHTML = "";
+        createModal();
+    })
+
     const form = document.createElement('form');
 
+    // Création de la partie du formulaire correspondant au choix de l'image
     const divAjout = document.createElement('div');
     divAjout.className = "div-file";
     const iconImg = document.createElement('i');
@@ -227,6 +234,7 @@ const addWorks = function ()
     divAjout.appendChild(labelAjout);
     divAjout.appendChild(pAjout);
 
+    // Création du reste du formulaire
     const labelTitle = document.createElement('label');
     labelTitle.innerText = "Titre";
     const inTitle = document.createElement('input');
@@ -251,6 +259,7 @@ const addWorks = function ()
         selectCat.appendChild(option);
     }
     
+    // On ajoute au formulaire
     form.appendChild(divAjout);
     form.appendChild(labelTitle);
     form.appendChild(inTitle);
@@ -264,9 +273,10 @@ const addWorks = function ()
 }
 
 // Permet de supprimer un projet
-const deleteTest = async function(e)
+const deleteWorks = async function(e)
 {
     e.preventDefault();
+    // On récupère le token et l'id du projet
     const token = window.localStorage.getItem('token');
     const id = this.getAttribute('id');
     fetch(`http://localhost:5678/api/works/${id}`, {
@@ -284,22 +294,8 @@ const deleteTest = async function(e)
     .catch(error => {
         console.error('There was an error!', error);
     });
-
-
-    await fetch('http://localhost:5678/api/works')
-    .then(res =>
-        {
-            res.json().then(data => 
-                {
-                    console.log(data);
-                })
-        })
     
-    /*document.querySelector('.modal-img').innerHTML = "";
-    document.querySelector(".gallery").innerHTML = "";
-    genererSet(set);
-    createModal();*/
-    //console.log(dataRes);
+
 }
 
 // Créer le modal
@@ -318,9 +314,11 @@ function createModal()
     const divImg = document.createElement('div');
     divImg.className = "modal-img";
 
+    // On récupère tous les projets depuis le local storage et on en créé un set
     const setArr = JSON.parse(window.localStorage.getItem('setTous'));
     const set = new Set(setArr);
     let setIter = set.values();
+    // On ajoute chaque projet à la modal
     for (let i = 0; i<set.size; i++)
     {
         let works = setIter.next().value;
@@ -328,9 +326,10 @@ function createModal()
                 
         const imageElement = document.createElement("img");
         imageElement.src = works.imageUrl;
+        // Ajout de l'icon de suppression et la fonction pour supprimer un projet
         const iElement = document.createElement("i");
         iElement.className = "fa-solid fa-trash-can";
-        iElement.addEventListener('click', deleteTest);
+        iElement.addEventListener('click', deleteWorks);
         iElement.id = works.id;
 
         const figcaptionElement = document.createElement("figcaption");
@@ -346,6 +345,7 @@ function createModal()
         blockAside.appendChild(divAside);
     }
 
+    // On ajoute les bouttons pour ajouter un projet
     const divBtn = document.createElement('div');
     divBtn.className = "modal-button";
     const btnAjout = document.createElement('button');
@@ -360,6 +360,8 @@ function createModal()
 
     divAside.appendChild(divImg);
     divAside.appendChild(divBtn);
+
+    divAside.addEventListener('click', stopPropagation)
 }
 
 fetch('http://localhost:5678/api/works')
@@ -367,6 +369,7 @@ fetch('http://localhost:5678/api/works')
         {
             resWorks.json().then(dataWorks =>
                 {
+                    // On instancie les sets 
                     const setObjets = new Set();
                     const setAppartements = new Set();
                     const setHotel = new Set();
@@ -378,6 +381,7 @@ fetch('http://localhost:5678/api/works')
                                 resCat.json().then(dataCat =>
                                 {   
                                     window.localStorage.setItem("catégorie", JSON.stringify(dataCat));
+                                    // On ajoute chaque projet au set correspondant à sa catégorie
                                     for (let i = 0; i<dataWorks.length; i++)
                                     {
                                         if (dataWorks[i].categoryId == dataCat[0].id) setObjets.add(dataWorks[i]);
@@ -389,9 +393,11 @@ fetch('http://localhost:5678/api/works')
                                         setTous.add(dataWorks[i]);
                                     }
 
+                                    // On met le set avec tous les projets dans le local storage
                                     const setArr = Array.from(setTous);
                                     window.localStorage.setItem('setTous', JSON.stringify(setArr));
-                                                        
+                                               
+                                    // On ajoute l'event listener correspondant à chaque boutton
                                     const bouttonTous = document.querySelector("#tous");
                                     bouttonTous.addEventListener("click", function ()
                                     {
@@ -419,13 +425,18 @@ fetch('http://localhost:5678/api/works')
                                         document.querySelector(".gallery").innerHTML = "";
                                         genererSet(setHotel);
                                     })
-                                    //window.localStorage.clear();
+
+
                                     bouttonTous.click();
                                     bouttonTous.focus();
+
+                                    // On récupère le token via le local storage
                                     const token = window.localStorage.getItem('token');
 
+                                    // Si on est connecter alors il y a un token dans le local storage sinon token sera null
                                     if (token != null)
                                     {
+                                        // On créer la page on mode édition
                                         modifPage();
                                         eventModal();
                                         createModal();

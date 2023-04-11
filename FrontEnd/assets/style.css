@@ -200,6 +200,7 @@ footer nav ul {
 	margin: 2em
 }
 
+/* css pour pouvoir filtrer les projets*/
 #ulFiltre {	
 	display: flex;
 	flex-direction: row;
@@ -212,6 +213,7 @@ footer nav ul {
 	margin-top: 5px;
 }
 
+/* css pour tous les filtres*/
 #tous, #hotels, #appartements, #objets {
 	border: none;
 	background-color: white;
@@ -234,7 +236,7 @@ footer nav ul {
 	display: flex;
 	justify-content: space-between;
 }
-
+ /* css pour la page en mode édition*/
 .admin {
 	display: flex;
 	flex-direction: row;
@@ -266,6 +268,7 @@ footer nav ul {
 	color: lightgray;
 }
 
+/* css pour le lien pour ouvrir la modal*/
 .projet {
 	display: flex;
 	flex-direction: row;
