@@ -178,12 +178,15 @@ const validWorks = async function (e)
         },
         body: form,
     })
+<<<<<<< HEAD
 
     const data = await res.json()
     if (data.id == null)
     {
         alert("Erreur, pas d'image, de titre ou de catégorie");   
     } 
+=======
+>>>>>>> 28fde203846b00cbb148c7b77826b9fb647a2b06
 }
 
 // Afficher le formulaire d'ajout des projets
